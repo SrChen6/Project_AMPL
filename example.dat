@@ -1,0 +1,6 @@
+param ca := 25;
+param cb := 30;
+param ta := 0.005;
+param tb := 0.0025;
+param ua := 6000;
+param ub := 4000;
