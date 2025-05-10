@@ -1,0 +1,10 @@
+model example.mod;
+data example.dat;
+show;
+expand;
+option solver cplexamp;
+# option solver cplex
+solve;
+display xa, xb;
+
+
