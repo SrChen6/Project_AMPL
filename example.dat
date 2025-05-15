@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 param ca := 25;
 param cb := 30;
 param ta := 0.005;
 param tb := 0.0025;
 param ua := 6000;
 param ub := 4000;
+=======
+param ca := 25;
+param cb := 30;
+param ta := 0.005;
+param tb := 0.0025;
+param ua := 6000;
+param ub := 4000;
+>>>>>>> 7781c58243fac871d039d5a0a22ad4b822823639
