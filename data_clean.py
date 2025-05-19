@@ -1,3 +1,5 @@
+import sys
+
 def process_svm_data(input_file, output_file, nu=1.0):
     observations = []
     non_separable = []
@@ -23,19 +25,20 @@ def process_svm_data(input_file, output_file, nu=1.0):
 
     # Writing the .dat file
     with open(output_file, 'w') as f:
-        f.write("set N:= ")
-        f.write(f"{1}..{len(observations[0][0])};\n") # Number of dimensions
-        f.write("set M:= ")
-        f.write(f"{1}..{len(observations)};\n\n") # Number of observations
+        f.write("param N:= ")
+        f.write(f"{len(observations[0][0])};\n") # Number of dimensions
+        f.write("param M:= ")
+        f.write(f"{len(observations)};\n\n") # Number of observations
 
         f.write(f"param nu := {nu};\n\n")
 
 
         # Writing parameter x
-        f.write("param X :=\n")
+        f.write(f"param X : 1 2 3 4:=\n")
         for idx, (features, _) in enumerate(observations, start=1):
-            for j, value in enumerate(features, start=1):
-                f.write(f"{idx} {j} {value}\n")
+            f.write(f"{idx} {' '.join(map(str, features))}\n")
+            #for j, value in enumerate(features, start=1):
+            #    f.write(f"{idx} {j} {value}\n")
         f.write(";\n\n")
 
         # Writing parameter y
@@ -48,4 +51,7 @@ def process_svm_data(input_file, output_file, nu=1.0):
     print(f"Data successfully written to {output_file}")
 
 # Example usage:
-process_svm_data("small_test", "SVM.dat", nu=1.0)
+if len(sys.argv) <= 2:
+    print("Usage: .exe input output")
+else:
+    process_svm_data(sys.argv[1], sys.argv[2], nu=1.0)
