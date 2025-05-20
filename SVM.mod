@@ -6,6 +6,7 @@ param y{1..M};        # Class labels (1 or -1)
 param X{1..M, 1..N};            # Feature matrix
 
 
+
 var w{1..N};                 # Weights
 var gamma;                # Bias
 var s{1..M} >= 0;            # Slack 

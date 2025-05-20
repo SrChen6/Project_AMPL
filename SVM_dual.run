@@ -1,0 +1,11 @@
+# To execute: include "code".run
+
+reset;
+model SVM_dual.mod;
+data SVM.dat;
+option solver gurobi;
+# cplex, gurobi, minos
+
+solve;
+
+display la;
