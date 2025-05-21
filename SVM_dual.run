@@ -2,10 +2,46 @@
 
 reset;
 model SVM_dual.mod;
-data SVM.dat;
-option solver gurobi;
+data train.dat;
+option solver cplex;
 # cplex, gurobi, minos
 
 solve;
 
 display la;
+
+# Retrieving w from lambda
+for {j in 1..N} {
+    let w[j] := sum {i in 1..M} la[i] * y[i] * X[i, j];
+}
+	
+display w;
+
+# Retrieving gamma
+for {i in 1..M} {
+    if la[i] > 1e-8 && la[i] < 1 then {
+        let gamma := y[i] - sum {j in 1..N} w[j] * X[i, j];
+    }
+}
+
+display gamma;
+
+# Accuracy computation
+reset data M, N, nu, X, y;
+
+data test.dat;
+
+param pred{i in 1..M}, default 0;
+
+
+let {i in 1..M} pred[i] :=
+    if sum{j in 1..N} w[j] * X[i,j] + gamma >= 0 then 1 else -1;
+
+
+param correct{i in 1..M} :=
+    if pred[i] = y[i] then 1 else 0;
+
+param total_correct := sum{i in 1..M} correct[i];
+param accuracy := total_correct / M;
+
+display total_correct, accuracy;
