@@ -51,4 +51,4 @@ def process_svm_data(input_file, train_file, test_file, nu=1.0, train_ratio=0.8)
 if len(sys.argv) < 4:
     print("Usage: .exe input.txt train.dat test.dat")
 else:
-    process_svm_data(sys.argv[1], sys.argv[2], sys.argv[3])
+    process_svm_data(sys.argv[1], sys.argv[2], sys.argv[3], train_ratio=0.6)
