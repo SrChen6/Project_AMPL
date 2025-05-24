@@ -10,13 +10,6 @@ solve;
 
 display la;
 
-# Retrieving w from lambda
-for {j in 1..N} {
-    let w[j] := sum {i in 1..M} la[i] * y[i] * X[i, j];
-}
-	
-display w;
-
 # Retrieving gamma
 param gamma_tmp;
 param count_tmp;
@@ -26,7 +19,7 @@ let count_tmp := 0;
 
 for {i in 1..M} {
     if (la[i] > 1e-6 && la[i] < 0.99*nu) then {
-        let gamma_tmp := gamma_tmp + (y[i] - sum {j in 1..N} w[j] * X[i,j]);
+        let gamma_tmp := gamma_tmp + (y[i] - sum{j in 1..N} la[i] * y[i] * K[i,j]);
         let count_tmp := count_tmp + 1;
     }
 }
@@ -35,8 +28,6 @@ let gamma := gamma_tmp / count_tmp;
 display gamma;
 display count_tmp;
 
-
-display gamma;
 
 # Accuracy computation
 reset data M, N, nu, X, y;
@@ -47,7 +38,7 @@ param pred{i in 1..M}, default 0;
 
 
 let {i in 1..M} pred[i] :=
-    if sum{j in 1..N} w[j] * X[i,j] + gamma >= 0 then 1 else -1;
+    if (sum{j in 1..N} la[i] * y[i] * K[i,j]) + gamma >= 0 then 1 else -1;
 
 
 param correct{i in 1..M} :=
