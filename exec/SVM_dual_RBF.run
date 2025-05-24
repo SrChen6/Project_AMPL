@@ -18,8 +18,8 @@ let gamma_tmp := 0;
 let count_tmp := 0;
 
 for {i in 1..M} {
-    if (la[i] > 1e-6 && la[i] < 0.99*nu) then {
-        let gamma_tmp := gamma_tmp + (y[i] - sum{j in 1..N} la[i] * y[i] * K[i,j]);
+    if (la[i] > 1e-6*nu && la[i] < 0.99*nu) then {
+        let gamma_tmp := gamma_tmp + (y[i] - sum{j in 1..N} la[i] * y[i] * K[j, i]);
         let count_tmp := count_tmp + 1;
     }
 }
@@ -30,7 +30,7 @@ display count_tmp;
 
 
 # Accuracy computation
-reset data M, N, nu, X, y;
+reset data M, N, nu, X, y, K;
 
 data "../data/test.dat";
 
@@ -38,7 +38,7 @@ param pred{i in 1..M}, default 0;
 
 
 let {i in 1..M} pred[i] :=
-    if (sum{j in 1..N} la[i] * y[i] * K[i,j]) + gamma >= 0 then 1 else -1;
+    if (sum{j in 1..N} la[i] * y[i] * K[j, i]) + gamma >= 0 then 1 else -1;
 
 
 param correct{i in 1..M} :=
