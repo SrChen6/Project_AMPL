@@ -1,0 +1,36 @@
+# To execute: include "code".run
+
+reset;
+model "../models/SVM.mod";
+data "../data/iris_train.dat";
+option solver cplex;
+# cplex, gurobi, minos
+
+
+solve;
+
+display w;
+
+display gamma;
+
+display s;
+
+# Accuracy computation
+reset data M, N, nu, X, y;
+
+data "../data/iris_test.dat";
+
+param pred{i in 1..M}, default 0;
+
+
+let {i in 1..M} pred[i] :=
+    if sum{j in 1..N} w[j] * X[i,j] + gamma >= 0 then 1 else -1;
+
+
+param correct{i in 1..M} :=
+    if pred[i] = y[i] then 1 else 0;
+
+param total_correct := sum{i in 1..M} correct[i];
+param accuracy := total_correct / M;
+
+display total_correct, accuracy;

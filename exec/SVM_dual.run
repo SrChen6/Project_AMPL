@@ -1,24 +1,35 @@
 # To execute: include "code".run
 
 reset;
-model SVM.mod;
-data swiss_train.dat;
+model "../models/SVM_dual.mod";
+data "../data/train.dat";
 option solver cplex;
 # cplex, gurobi, minos
 
-
 solve;
 
+display la;
+
+# Retrieving w from lambda
+for {j in 1..N} {
+    let w[j] := sum {i in 1..M} la[i] * y[i] * X[i, j];
+}
+	
 display w;
 
-display gamma;
+# Retrieving gamma
+for {i in 1..M} {
+    if la[i] > 1e-8 && la[i] < 1 then {
+        let gamma := y[i] - sum {j in 1..N} w[j] * X[i, j];
+    }
+}
 
-display s;
+display gamma;
 
 # Accuracy computation
 reset data M, N, nu, X, y;
 
-data swiss_test.dat;
+data "../data/test.dat";
 
 param pred{i in 1..M}, default 0;
 

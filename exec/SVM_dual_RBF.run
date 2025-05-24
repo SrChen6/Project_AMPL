@@ -1,8 +1,8 @@
 # To execute: include "code".run
 
 reset;
-model SVM_dual.mod;
-data train.dat;
+model "../models/SVM_dual_RBF.mod";
+data "../data/train.dat";
 option solver cplex;
 # cplex, gurobi, minos
 
@@ -29,7 +29,7 @@ display gamma;
 # Accuracy computation
 reset data M, N, nu, X, y;
 
-data test.dat;
+data "../data/test.dat";
 
 param pred{i in 1..M}, default 0;
 

@@ -1,8 +1,8 @@
 # To execute: include "code".run
 
 reset;
-model SVM.mod;
-data iris_train.dat;
+model "../models/SVM.mod";
+data "../data/train.dat";
 option solver cplex;
 # cplex, gurobi, minos
 
@@ -18,7 +18,7 @@ display s;
 # Accuracy computation
 reset data M, N, nu, X, y;
 
-data iris_test.dat;
+data "../data/test.dat";
 
 param pred{i in 1..M}, default 0;
 
