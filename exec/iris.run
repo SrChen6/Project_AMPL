@@ -6,14 +6,12 @@ data "../data/iris_train.dat";
 option solver cplex;
 # cplex, gurobi, minos
 
-
 solve;
 
 display w;
 
 display gamma;
 
-display s;
 
 # Accuracy computation
 reset data M, N, nu, X, y;

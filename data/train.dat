@@ -1,7 +1,7 @@
 param N := 4;
 param M := 320;
 
-param nu := 1.0;
+param nu := 0.01;
 
 param X : 1 2 3 4 :=
 1 0.76 0.006 0.485 0.888

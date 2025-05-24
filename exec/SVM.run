@@ -13,7 +13,6 @@ display w;
 
 display gamma;
 
-display s;
 
 # Accuracy computation
 reset data M, N, nu, X, y;
