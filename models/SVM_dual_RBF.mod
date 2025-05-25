@@ -1,45 +1,20 @@
-# To execute: include "code".run
-reset;
-model "../models/SVM_dual_RBF.mod";
-data "../data/train.dat";
-option solver cplex;
-# cplex, gurobi, minos
+param N;                    # Features
+param M;                    # Samples 
 
-solve;
-
-display la;
-
-# Retrieving gamma
-
-for {i in 1..M} {
-    if (la[i] > 1e-6 && la[i] < 0.99*nu) then {
-        let gamma := y[i] - sum{j in 1..M} la[j] * y[j] * K[i,j];
-        break;
-    }
-}
+param nu > 0;             # Regularization parameter
+param y{1..M};        # Class labels (1 or -1)
+param X{1..M, 1..N};            # Feature matrix
+param sigma := 1;
+param K{i in 1..M, k in 1..M} := exp(- sum{j in 1..N} (X[i,j] - X[k,j])^2/(2 * sigma^2)); # Gaussian kernel
+param w{1..4};
+param gamma;
 
 
-display gamma;
+var la{1..M} >= 0, <= nu;
 
 
-# Accuracy computation
-param M_test;
-param X_test {1..M_test, 1..N};
-param y_test {1..M_test};
+maximize Obj:
+	sum{i in 1..M} la[i] - 0.5 * (sum{i in 1..M, j in 1..M} la[i]*y[i]*la[j]*y[j]*K[i,j]);
 
-data "../data/test_kernel.dat";
-
-param pred{i in 1..M_test}, default 0;
-param K_pred {i in 1..M_test, j in 1..M} := exp(- sum{k in 1..N} (X_test[i,k] - X[j,k])^2/(2 * sigma^2));
-
-let {i in 1..M_test} pred[i] :=
-    if (sum{j in 1..M} la[j] * y[j] * K_pred[i,j]) + gamma >= 0 then 1 else -1;
-
-
-param correct{i in 1..M_test} :=
-    if pred[i] = y_test[i] then 1 else 0;
-
-param total_correct := sum{i in 1..M_test} correct[i];
-param accuracy := total_correct / M_test;
-
-display total_correct, accuracy;
+s.t. Constrain:
+	sum{i in 1..M} la[i]*y[i] =0;
