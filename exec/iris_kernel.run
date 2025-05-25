@@ -11,43 +11,36 @@ solve;
 display la;
 
 # Retrieving gamma
-param gamma_tmp;
-param count_tmp;
-
-let gamma_tmp := 0;
-let count_tmp := 0;
 
 for {i in 1..M} {
     if (la[i] > 1e-6 && la[i] < 0.99*nu) then {
-        let gamma_tmp := gamma_tmp + (y[i] - sum{j in 1..N} la[i] * y[i] * K[i,j]);
-        let count_tmp := count_tmp + 1;
+        let gamma := y[i] - sum{j in 1..M} la[j] * y[j] * K[i,j];
+        break;
     }
 }
 
-let gamma := gamma_tmp / count_tmp;
+
 display gamma;
-display count_tmp;
+
 
 # Accuracy computation
-reset data M, N, nu, X, y;
+param M_test;
+param X_test {1..M_test, 1..N};
+param y_test {1..M_test};
+
+data "../data/iris_ns_test_kernel.dat";
+
+param pred{i in 1..M_test}, default 0;
+param K_pred {i in 1..M_test, j in 1..M} := exp(- sum{k in 1..N} (X_test[i,k] - X[j,k])^2/(2 * sigma^2));
+
+let {i in 1..M_test} pred[i] :=
+    if (sum{j in 1..M} la[j] * y[j] * K_pred[i,j]) + gamma >= 0 then 1 else -1;
 
 
-data "../data/iris_no_separable_test.dat";
+param correct{i in 1..M_test} :=
+    if pred[i] = y_test[i] then 1 else 0;
 
-param new_K{i in 1..M, k in 1..M} := exp(- sum{j in 1..N} (X[i,j] - X[k,j])^2/(2 * sigma^2)); # Gaussian kernel
-
-
-param pred{i in 1..M}, default 0;
-
-
-let {i in 1..M} pred[i] :=
-    if sum{j in 1..N} la[i] * y[i] * new_K[i,j] + gamma >= 0 then 1 else -1;
-
-
-param correct{i in 1..M} :=
-    if pred[i] = y[i] then 1 else 0;
-
-param total_correct := sum{i in 1..M} correct[i];
-param accuracy := total_correct / M;
+param total_correct := sum{i in 1..M_test} correct[i];
+param accuracy := total_correct / M_test;
 
 display total_correct, accuracy;
