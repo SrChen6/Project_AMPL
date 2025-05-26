@@ -43,3 +43,4 @@ param total_correct := sum{i in 1..M_test} correct[i];
 param accuracy := total_correct / M_test;
 
 display total_correct, accuracy;
+
