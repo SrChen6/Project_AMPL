@@ -2,11 +2,11 @@
 
 reset;
 model "../models/SVM.mod";
-data "../data/train.dat";
+data "../data/swiss_train.dat";
 option solver cplex;
 # cplex, gurobi, minos
 
-
+option cplex_options 'display=2';
 solve;
 
 display w;
@@ -17,7 +17,7 @@ display gamma;
 # Accuracy computation
 reset data M, N, nu, X, y;
 
-data "../data/test.dat";
+data "../data/swiss_test.dat";
 
 param pred{i in 1..M}, default 0;
 
@@ -33,3 +33,5 @@ param total_correct := sum{i in 1..M} correct[i];
 param accuracy := total_correct / M;
 
 display total_correct, accuracy;
+
+display _total_solve_time;

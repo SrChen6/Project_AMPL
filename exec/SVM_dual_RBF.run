@@ -44,3 +44,4 @@ param accuracy := total_correct / M_test;
 
 display total_correct, accuracy;
 
+display _total_solve_time;

@@ -56,3 +56,5 @@ param total_correct := sum{i in 1..M} correct[i];
 param accuracy := total_correct / M;
 
 display total_correct, accuracy;
+
+display _total_solve_time;

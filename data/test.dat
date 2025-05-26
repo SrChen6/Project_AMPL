@@ -1,9 +1,9 @@
-param N_test := 4;
-param M_test := 80;
+param N := 4;
+param M := 80;
 
-param nu_test := 1;
+param nu := 1;
 
-param X_test : 1 2 3 4 :=
+param X : 1 2 3 4 :=
 1 0.107 0.058 0.68 0.546
 2 0.363 0.085 0.089 0.127
 3 0.368 0.982 0.514 0.725
@@ -86,7 +86,7 @@ param X_test : 1 2 3 4 :=
 80 0.291 0.949 0.926 0.831
 ;
 
-param y_test :=
+param y :=
 1 -1.0
 2 -1.0
 3 1.0
